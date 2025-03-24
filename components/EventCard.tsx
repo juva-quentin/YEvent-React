@@ -10,14 +10,26 @@ interface EventCardProps {
     date: string;
     places: number;
     location: string;
-    isComplete: boolean; // Ajout du booléen est_complet
+    isComplete: boolean; // Événement complet
+    isPassed: boolean;   // Événement passé
     onPress: () => void;
-    isTicket?: boolean; // Nouveau paramètre pour afficher la version billet
+    isTicket?: boolean;
 }
 
-export default function EventCard({ image, price, title, date, places, location, isComplete, isTicket = false, onPress }: EventCardProps) {
+export default function EventCard({
+                                      image,
+                                      price,
+                                      title,
+                                      date,
+                                      places,
+                                      location,
+                                      isComplete,
+                                      isPassed,
+                                      isTicket = false,
+                                      onPress
+                                  }: EventCardProps) {
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, isPassed && styles.passedCard]}>
             <View style={styles.imageContainer}>
                 <Image source={{ uri: image }} style={styles.image} />
                 {/* Prix flottant */}
@@ -28,21 +40,24 @@ export default function EventCard({ image, price, title, date, places, location,
             <View style={styles.infoContainer}>
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.date}>
-                    {date} {isComplete ? (
-                    <Text style={styles.completeText}>● Événement complet</Text>
-                ) : (
-                    isTicket ? (
+                    {date}{' '}
+                    {isPassed ? (
+                        <Text style={styles.passedText}>● Événement passé</Text>
+                    ) : isComplete ? (
+                        <Text style={styles.completeText}>● Événement complet</Text>
+                    ) : isTicket ? (
                         <Text style={styles.places}>● {places} billets réservés</Text>
                     ) : (
                         <Text style={styles.places}>● {places} places restantes</Text>
-                    )
-                )}
+                    )}
                 </Text>
                 {/* Afficher le lieu uniquement pour les événements normaux */}
-                {<Text style={styles.location}>{location}</Text>}
+                {!isPassed && <Text style={styles.location}>{location}</Text>}
                 {/* Trait de séparation */}
                 <View style={styles.separator} />
-                {isComplete ? (
+                {isPassed ? (
+                    <Text style={styles.passedMessage}>Cet événement est passé</Text>
+                ) : isComplete ? (
                     <Text style={styles.completeMessage}>Événement complet</Text>
                 ) : (
                     <CustomButton
@@ -63,6 +78,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
         marginBottom: 15,
         overflow: 'hidden',
+    },
+    passedCard: {
+        backgroundColor: Colors.card, // Couleur légèrement grisée pour les événements passés
     },
     imageContainer: {
         position: 'relative',
@@ -116,7 +134,17 @@ const styles = StyleSheet.create({
         color: Colors.error, // Rouge pour signaler complet
         fontWeight: 'bold',
     },
+    passedText: {
+        color: Colors.error, // Orange pour événement passé
+        fontWeight: 'bold',
+    },
     completeMessage: {
+        textAlign: 'center',
+        color: Colors.error,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    passedMessage: {
         textAlign: 'center',
         color: Colors.error,
         fontSize: 16,
