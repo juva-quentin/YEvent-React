@@ -16,7 +16,8 @@ import GradientBackground from '@/components/GradientBackground';
 import Colors from '@/constants/Colors';
 import { signInWithEmail } from '@/services/authService';
 
-export default function LoginScreen({ navigation }: { navigation: any }) {
+// @ts-ignore
+export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 

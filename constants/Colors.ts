@@ -7,6 +7,7 @@ const Colors = {
   textSecondary: '#828282', // Gris pour les textes secondaires
   border: '#313131', // Bordures ou séparateurs
   error: '#FF3B30', // Couleur pour les erreurs
+  variant: 'rgba(255,255,255,0.2)'
 };
 
 export default Colors;
