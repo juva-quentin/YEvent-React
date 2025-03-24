@@ -87,4 +87,26 @@ export const deleteUser = async (id: string) => {
     return { message: 'Utilisateur supprimé avec succès', data };
 };
 
-export default { getAllUsers, getUserById, getCurrentUser, updateUser, deleteUser };
+// Obtenir l'ID de l'utilisateur connecté
+export const getCurrentUserId = async (): Promise<{ userId?: string; error?: any }> => {
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
+    if (error || !user) {
+        console.error('Erreur lors de la récupération de l\'ID utilisateur :', error?.message || 'Aucun utilisateur connecté');
+        return { error: error || new Error('Aucun utilisateur connecté') };
+    }
+
+    return { userId: user.id };
+};
+
+export default {
+    getAllUsers,
+    getUserById,
+    getCurrentUser,
+    getCurrentUserId,
+    updateUser,
+    deleteUser
+};

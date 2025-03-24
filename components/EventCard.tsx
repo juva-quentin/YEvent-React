@@ -10,10 +10,12 @@ interface EventCardProps {
     date: string;
     places: number;
     location: string;
+    isComplete: boolean; // Ajout du booléen est_complet
     onPress: () => void;
+    isTicket?: boolean; // Nouveau paramètre pour afficher la version billet
 }
 
-export default function EventCard({ image, price, title, date, places, location, onPress }: EventCardProps) {
+export default function EventCard({ image, price, title, date, places, location, isComplete, isTicket = false, onPress }: EventCardProps) {
     return (
         <View style={styles.card}>
             <View style={styles.imageContainer}>
@@ -26,12 +28,29 @@ export default function EventCard({ image, price, title, date, places, location,
             <View style={styles.infoContainer}>
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.date}>
-                    {date} <Text style={styles.places}>● {places} places restantes</Text>
+                    {date} {isComplete ? (
+                    <Text style={styles.completeText}>● Événement complet</Text>
+                ) : (
+                    isTicket ? (
+                        <Text style={styles.places}>● {places} billets réservés</Text>
+                    ) : (
+                        <Text style={styles.places}>● {places} places restantes</Text>
+                    )
+                )}
                 </Text>
-                <Text style={styles.location}>{location}</Text>
+                {/* Afficher le lieu uniquement pour les événements normaux */}
+                {<Text style={styles.location}>{location}</Text>}
                 {/* Trait de séparation */}
                 <View style={styles.separator} />
-                <CustomButton title="En savoir plus sur l'évènement" onPress={onPress} />
+                {isComplete ? (
+                    <Text style={styles.completeMessage}>Événement complet</Text>
+                ) : (
+                    <CustomButton
+                        title={isTicket ? 'Voir ma réservation' : 'En savoir plus sur l\'événement'}
+                        onPress={onPress}
+                        color={isTicket ? Colors.primary : Colors.secondary}
+                    />
+                )}
             </View>
         </View>
     );
@@ -90,7 +109,17 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: Colors.variant, // Utilisation de la couleur de bordure
-        marginVertical: 5, // Espacement au-dessus et en dessous du trait
+        backgroundColor: Colors.variant,
+        marginVertical: 5,
+    },
+    completeText: {
+        color: Colors.error, // Rouge pour signaler complet
+        fontWeight: 'bold',
+    },
+    completeMessage: {
+        textAlign: 'center',
+        color: Colors.error,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });

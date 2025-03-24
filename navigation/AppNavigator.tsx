@@ -6,10 +6,10 @@ import CustomTabBar from '@/components/CustomTapBar';
 // Import des écrans
 import HomeScreen from '@/screens/HomeScreen';
 import EventDetailsScreen from '@/screens/EventDetailsScreen';
-import BookingScreen from '@/screens/BookingScreen';
 import ConfirmationScreen from '@/screens/ConfirmationScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
 import MapsScreen from '@/screens/MapScreen';
+import TicketDetailsScreen from "@/screens/TicketDetailsScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -47,13 +47,13 @@ export default function AppNavigator() {
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="Booking"
-                component={BookingScreen}
+                name="Confirmation"
+                component={ConfirmationScreen}
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="Confirmation"
-                component={ConfirmationScreen}
+                name="TicketDetails"
+                component={TicketDetailsScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

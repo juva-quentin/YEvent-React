@@ -88,7 +88,7 @@ export default function MapsScreen({ navigation }: any) { // Assurez-vous d'incl
                                     longitude: event.coordonnees.longitude,
                                 }}
                                 title={event.titre}
-                                onCalloutPress={() => navigation.navigate('EventDetails', { id: event.id })}
+                                onCalloutPress={() => navigation.navigate('EventDetails', { eventId: event.id })}
                             >
                                 <Callout tooltip>
                                     <View style={styles.calloutContainer}>

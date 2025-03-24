@@ -14,12 +14,13 @@ import EventCard from '@/components/EventCard';
 import FilterModal from '@/components/FilterModal';
 import Colors from '@/constants/Colors';
 import { fetchEvents } from '@/services/eventService';
+import { getCurrentUser } from '@/services/userService';
 import { Event } from '@/models/event';
 import { formatDate } from '@/utils/dateUtils';
 
-const ITEMS_PER_PAGE = 10; // Nombre d'événements chargés par page
+const ITEMS_PER_PAGE = 10;
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }: any) {
     const [events, setEvents] = useState<Event[]>([]);
     const [allEvents, setAllEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -29,8 +30,9 @@ export default function HomeScreen() {
 
     const [filtersVisible, setFiltersVisible] = useState<boolean>(false);
     const [appliedFilters, setAppliedFilters] = useState<any>({});
+    const [user, setUser] = useState<{ nom: string } | null>(null);
 
-    // Chargement initial des événements
+    // Chargement des événements
     useEffect(() => {
         loadInitialEvents();
     }, [appliedFilters]);
@@ -94,9 +96,31 @@ export default function HomeScreen() {
         return filteredData;
     };
 
+    // Récupération des infos utilisateur
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const { data, error } = await getCurrentUser();
+            if (data) {
+                setUser(data);
+            } else {
+                console.error('Erreur lors de la récupération de l\'utilisateur connecté :', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
     return (
         <GradientBackground startColor={Colors.secondary} endColor={Colors.background} locations={[0, 0.2]}>
             <SafeAreaView style={styles.container}>
+                {/* Message de salutation */}
+                {user && (
+                    <View style={styles.welcomeContainer}>
+                        <Text style={styles.welcomeText}>Bonjour, {user.nom} 👋</Text>
+                    </View>
+                )}
+
+
                 {/* Barre de Recherche */}
                 <SearchBar placeholder="Rechercher..." />
 
@@ -117,12 +141,13 @@ export default function HomeScreen() {
                         renderItem={({ item }) => (
                             <EventCard
                                 image={'https://via.placeholder.com/400x200'}
-                                price={`${item.capacite}€`}
+                                price={item.prix ? `${item.prix}€` : 'Gratuit'}
                                 title={item.titre}
                                 date={formatDate(item.date)}
                                 places={item.places_restantes}
                                 location={item.lieu}
-                                onPress={() => console.log(`Détails de l'événement : ${item.titre}`)}
+                                isComplete={item.places_restantes === 0}
+                                onPress={() => navigation.navigate('EventDetails', { eventId: item.id })}
                             />
                         )}
                         onEndReached={loadMoreEvents}
@@ -150,6 +175,15 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    welcomeContainer: {
+        paddingHorizontal: 20,
+        marginVertical: 10,
+    },
+    welcomeText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: Colors.text,
     },
     filterButton: {
         backgroundColor: Colors.secondary,
