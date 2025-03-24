@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, ActivityIndicator, Alert, TouchableOpacity, Text } from 'react-native';
-import MapView, { Marker, MapType } from 'react-native-maps';
+import { View, StyleSheet, ActivityIndicator, Alert, TouchableOpacity, Text, Button } from 'react-native';
+import MapView, { Marker, MapType, Callout } from 'react-native-maps';
 import Colors from '@/constants/Colors';
+// @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getCurrentLocation, startLocationUpdates } from '@/services/locationService';
 import { fetchEvents } from '@/services/eventService';
 import { Event } from '@/models/event';
 
-export default function MapsScreen() {
+export default function MapsScreen({ navigation }: any) { // Assurez-vous d'inclure "navigation" pour naviguer
     const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [mapType, setMapType] = useState<MapType>('standard'); // État pour le type de carte
@@ -87,8 +88,15 @@ export default function MapsScreen() {
                                     longitude: event.coordonnees.longitude,
                                 }}
                                 title={event.titre}
-                                description={event.lieu}
-                            />
+                                onCalloutPress={() => navigation.navigate('EventDetails', { id: event.id })}
+                            >
+                                <Callout tooltip>
+                                    <View style={styles.calloutContainer}>
+                                        <Text style={styles.calloutTitle}>{event.titre}</Text>
+                                        <Text style={styles.calloutSubtitle}>{event.lieu}</Text>
+                                    </View>
+                                </Callout>
+                            </Marker>
                         ))}
                     </MapView>
 
@@ -117,6 +125,30 @@ const styles = StyleSheet.create({
     map: {
         ...StyleSheet.absoluteFillObject,
     },
+    callout: {
+        width: 150,
+        alignItems: 'center',
+    },
+    calloutTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 4,
+    },
+    calloutSubtitle: {
+        fontSize: 12,
+        color: Colors.textSecondary,
+        marginBottom: 8,
+    },
+    detailButton: {
+        backgroundColor: Colors.secondary,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderRadius: 8,
+    },
+    detailButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
     floatingButton: {
         position: 'absolute',
         bottom: 120,
@@ -140,5 +172,17 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 14,
         fontWeight: 'bold',
+    },
+    calloutContainer: {
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 8,
+        width: 160,
+        alignItems: 'center',
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
     },
 });

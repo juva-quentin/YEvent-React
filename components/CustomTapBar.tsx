@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+// @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '@/constants/Colors';
 
