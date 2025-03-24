@@ -99,7 +99,7 @@ export default function ProfileScreen({ navigation }: { navigation: any }) {
                             contentContainerStyle={styles.flatList}
                             renderItem={({ item }) => (
                                 <EventCard
-                                    image="https://via.placeholder.com/400"
+                                    image="https://placehold.co/400x200.png"
                                     price={`${item.event.prix*item.nb_billets+'€' || 'Gratuit'}`}
                                     title={item.event.titre}
                                     date={formatDate(item.event.date)}
@@ -152,10 +152,5 @@ const styles = StyleSheet.create({
     noReservation: { fontSize: 16, color: Colors.textSecondary, textAlign: 'center', marginTop: 20 },
     flatList: {
         paddingBottom: 70,
-    },
-    settingsButton: {
-        position: 'absolute',
-        top: 20,
-        right: 20,
     },
 });
