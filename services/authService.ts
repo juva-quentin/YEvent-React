@@ -39,4 +39,16 @@ export const signInWithEmail = async (email: string, password: string) => {
     return { user: data.user };
 };
 
-export default { signUpWithEmail, signInWithEmail };
+// Fonction pour déconnecter l'utilisateur
+export const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+        console.error('Erreur lors de la déconnexion :', error.message);
+        return { error };
+    }
+    return { success: true };
+};
+
+
+export default { signUpWithEmail, signInWithEmail, signOut };

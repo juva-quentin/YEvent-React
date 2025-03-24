@@ -20,6 +20,7 @@ function BottomTabNavigator() {
         <Tab.Navigator
             tabBar={(props) => <CustomTabBar {...props} />} // Barre d'onglets personnalisée
             screenOptions={{ headerShown: false }}
+            initialRouteName="Accueil"
         >
             <Tab.Screen name="Cartes" component={MapsScreen} />
             <Tab.Screen name="Accueil" component={HomeScreen} />

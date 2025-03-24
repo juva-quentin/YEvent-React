@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '@/constants/Colors';
+// @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
 
 interface CustomInputProps {
