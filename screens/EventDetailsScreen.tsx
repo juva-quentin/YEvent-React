@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
 
+// @ts-ignore
 export default function EventDetailsScreen({ route, navigation }) {
     const { event } = route.params;
 

@@ -6,4 +6,5 @@ export type Event = {
     date: string; // Timestamp
     capacite: number; // int4
     places_restantes: number; // int4
+    coordonnees: { latitude: number; longitude: number }; // Nouvelle propriété
 };
