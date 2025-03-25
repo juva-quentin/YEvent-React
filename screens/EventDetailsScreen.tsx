@@ -58,6 +58,10 @@ export default function EventDetailsScreen({ route, navigation }: any) {
                 }));
 
                 Alert.alert('Réservation réussie', `Vous avez réservé ${selectedSeats} places pour cet événement.`);
+                // Navigue vers l'onglet "Profil" après la réservation
+                navigation.navigate('MainTabs', {
+                    screen: 'Profil',
+                });
             }
         } catch (err) {
             console.error('Erreur inattendue :', err);
