@@ -1,6 +1,14 @@
 import { supabase } from '@/utils/supabase';
 import { Event } from '@/models/event';
 
+// Fonction pour vérifier si la date est passée
+const checkIfDateIsPassed = (date: string): boolean => {
+    const eventDate = new Date(date);
+    // Date actuelle
+    const currentDate = new Date();
+    return eventDate < currentDate; // Retourne true si la date est passée
+};
+
 // Récupérer tous les événements
 export const fetchEvents = async (): Promise<Event[]> => {
     const { data, error } = await supabase.from('evenements').select('*');
@@ -10,11 +18,15 @@ export const fetchEvents = async (): Promise<Event[]> => {
         return [];
     }
 
-    return data as Event[];
+    // Ajout de la condition "est_passe" pour chaque événement
+    return data.map((event: Event) => ({
+        ...event,
+        est_passe: checkIfDateIsPassed(event.date),
+    })) as Event[];
 };
 
 // Récupérer un événement par ID
-export const getEventById = async (id: string) => {
+export const getEventById = async (id: string): Promise<{ data?: Event; error?: any }> => {
     const { data, error } = await supabase
         .from('evenements')
         .select('*')
@@ -26,7 +38,8 @@ export const getEventById = async (id: string) => {
         return { error };
     }
 
-    return { data };
+    // Ajout de la condition "est_passe"
+    return { data: { ...data, est_passe: checkIfDateIsPassed(data.date) } };
 };
 
 // Mettre à jour les places restantes d'un événement et le booléen est_complet

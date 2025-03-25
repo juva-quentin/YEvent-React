@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, FlatList, Dimensions, ActivityIndicator, Alert } from "react-native";
 import Colors from "@/constants/Colors";
 import GradientBackground from "@/components/GradientBackground";
-// @ts-ignore
 import Icon from "react-native-vector-icons/Ionicons";
 import { formatDate } from "@/utils/dateUtils";
 import QRCode from "react-native-qrcode-svg";
 import { getBilletsByReservationId } from "@/services/billetService";
+import { cancelReservation } from "@/services/reservationService";
+import ConfirmationMessage from "@/components/ConfirmationMessage";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -14,7 +15,9 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
     const { reservation } = route.params;
     const [billets, setBillets] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [showConfirmCancel, setShowConfirmCancel] = useState<boolean>(false);
 
+    // Fetch billets
     useEffect(() => {
         const fetchBillets = async () => {
             const { data, error } = await getBilletsByReservationId(reservation.id);
@@ -25,9 +28,20 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
             }
             setLoading(false);
         };
-
         fetchBillets();
     }, [reservation.id]);
+
+    // Annuler la réservation
+    const handleCancelReservation = async () => {
+        const { success, error } = await cancelReservation(reservation.id);
+        if (success) {
+            Alert.alert("Succès", "Votre réservation a été annulée.");
+            navigation.goBack();
+        } else {
+            Alert.alert("Erreur", "Impossible d'annuler la réservation.");
+            console.error(error);
+        }
+    };
 
     if (loading) {
         return (
@@ -46,6 +60,9 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
                         <Icon name="arrow-back" size={24} color="#fff" />
                     </TouchableOpacity>
                     <Text style={styles.appBarTitle}>Ma réservation</Text>
+                    <TouchableOpacity onPress={() => setShowConfirmCancel(true)} style={styles.cancelButton}>
+                        <Icon name="trash-outline" size={24} color="#fff" />
+                    </TouchableOpacity>
                 </View>
 
                 {/* Section de la réservation */}
@@ -80,6 +97,17 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
                         pagingEnabled
                     />
                 </View>
+
+                {/* Confirmation d'annulation */}
+                <ConfirmationMessage
+                    visible={showConfirmCancel}
+                    title="Annuler la réservation"
+                    message="Êtes-vous sûr de vouloir annuler cette réservation ? Cette action est irréversible."
+                    onConfirm={handleCancelReservation}
+                    onCancel={() => setShowConfirmCancel(false)}
+                    confirmText="Confirmer"
+                    cancelText="Annuler"
+                />
             </SafeAreaView>
         </GradientBackground>
     );
@@ -97,14 +125,18 @@ const styles = StyleSheet.create({
     appBar: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-around",
+        paddingHorizontal: 20,
         height: 60,
         elevation: 5,
     },
     backButton: {
         position: "absolute",
         left: 20,
-        zIndex: 1,
+    },
+    cancelButton: {
+        position: "absolute",
+        right: 20,
     },
     appBarTitle: {
         fontSize: 18,
@@ -139,7 +171,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     ticketCard: {
-        width: screenWidth * 0.8, // Largeur de la carte (80% de l'écran)
+        width: screenWidth * 0.8,
         marginHorizontal: 10,
         padding: 20,
         backgroundColor: Colors.card,
@@ -167,8 +199,8 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     qrCodeContainer: {
-        padding: 20, // Ajout de padding autour du QRCode
-        backgroundColor: Colors.text, // Optionnel, pour contraster
+        padding: 20,
+        backgroundColor: Colors.text,
         borderRadius: 10,
     },
 });

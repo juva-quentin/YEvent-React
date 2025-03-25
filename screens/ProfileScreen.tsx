@@ -105,6 +105,7 @@ export default function ProfileScreen({ navigation }: { navigation: any }) {
                                     date={formatDate(item.event.date)}
                                     places={item.nb_billets}
                                     location={item.event.lieu}
+                                    isPassed={new Date(item.event.date) < new Date()}
                                     isComplete={item.places_restantes === 0}
                                     onPress={() => navigation.navigate('TicketDetails', { reservation: item })}
                                     isTicket={true}
