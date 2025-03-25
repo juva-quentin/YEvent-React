@@ -168,7 +168,7 @@ export default function EventDetailsScreen({ route, navigation }: any) {
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background },
     appBar: {
         flexDirection: 'row',
         alignItems: 'center',

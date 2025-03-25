@@ -165,7 +165,7 @@ export default function ProfileScreen({ navigation }: { navigation: any }) {
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' , backgroundColor: Colors.background },
     header: { alignItems: 'center', paddingTop: 50, paddingBottom: 20 },
     profilePictureContainer: {
         backgroundColor: Colors.card,
