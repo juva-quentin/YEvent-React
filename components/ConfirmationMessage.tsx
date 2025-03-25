@@ -6,8 +6,8 @@ interface ConfirmationMessageProps {
     visible: boolean;
     title?: string;
     message: string;
-    onConfirm: () => void; // Fonction appelée pour confirmer
-    onCancel: () => void;  // Fonction appelée pour annuler
+    onConfirm: () => void;
+    onCancel: () => void;
     confirmText?: string;
     cancelText?: string;
 }
@@ -26,7 +26,7 @@ const ConfirmationMessage: React.FC<ConfirmationMessageProps> = ({
             visible={visible}
             animationType="fade"
             transparent={true}
-            onRequestClose={onCancel} // Sur Android, quand on appuie en dehors
+            onRequestClose={onCancel}
         >
             <View style={styles.overlay}>
                 <View style={styles.container}>
@@ -53,14 +53,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fond semi-transparent
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     container: {
         width: '80%',
         padding: 20,
         borderRadius: 10,
         backgroundColor: Colors.background,
-        elevation: 10, // Ombre Android
+        elevation: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,

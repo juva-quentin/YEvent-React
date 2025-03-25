@@ -10,8 +10,8 @@ interface EventCardProps {
     date: string;
     places: number;
     location: string;
-    isComplete: boolean; // Événement complet
-    isPassed: boolean;   // Événement passé
+    isComplete: boolean;
+    isPassed: boolean;
     onPress: () => void;
     isTicket?: boolean;
 }

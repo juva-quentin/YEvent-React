@@ -5,13 +5,13 @@ import Colors from '@/constants/Colors';
 interface CustomButtonProps {
     title: string;
     onPress: () => void;
-    color?: string; // Nouvelle prop pour la couleur (facultative)
+    color?: string;
 }
 
 export default function CustomButton({
                                          title,
                                          onPress,
-                                         color = Colors.secondary, // Valeur par défaut : Colors.secondary
+                                         color = Colors.secondary,
                                      }: CustomButtonProps) {
     return (
         <TouchableOpacity style={[styles.button, { backgroundColor: color }]} onPress={onPress}>

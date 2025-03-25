@@ -1,7 +1,7 @@
 export type Comment = {
-    id: string; // UUID
-    utilisateur_id: string; // UUID (Clé étrangère vers utilisateurs)
-    evenement_id: string; // UUID (Clé étrangère vers evenements)
+    id: string;
+    utilisateur_id: string;
+    evenement_id: string;
     texte: string;
-    created_at: string; // Timestamp
+    created_at: string;
 };

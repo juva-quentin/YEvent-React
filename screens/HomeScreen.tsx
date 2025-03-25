@@ -33,7 +33,6 @@ export default function HomeScreen({ navigation }: any) {
     const [appliedFilters, setAppliedFilters] = useState<any>({});
     const [user, setUser] = useState<{ nom: string } | null>(null);
 
-    // Chargement des événements
     useEffect(() => {
         loadInitialEvents();
     }, [appliedFilters]);
@@ -61,11 +60,11 @@ export default function HomeScreen({ navigation }: any) {
                 event.lieu.toLowerCase().includes(query.toLowerCase())
             );
             setEvents(filteredEvents);
-            setHasMore(false); // Pas de pagination pour une recherche filtrée
+            setHasMore(false);
         }
     };
 
-    // Chargement des événements supplémentaires
+
     const loadMoreEvents = () => {
         if (loadingMore || !hasMore) return;
 
@@ -81,7 +80,7 @@ export default function HomeScreen({ navigation }: any) {
         setLoadingMore(false);
     };
 
-    // Fonction pour appliquer les filtres avec tri ascendant/descendant
+
     const applyFilters = (data: Event[], filters: any) => {
         let filteredData = [...data];
 
@@ -113,7 +112,6 @@ export default function HomeScreen({ navigation }: any) {
         return filteredData;
     };
 
-    // Récupération des infos utilisateur
     useEffect(() => {
         const fetchUserData = async () => {
             const { data, error } = await getCurrentUser();

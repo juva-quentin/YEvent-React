@@ -25,7 +25,7 @@ export default function EventDetailsScreen({ route, navigation }: any) {
     const { eventId } = route.params;
     const [event, setEvent] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [selectedSeats, setSelectedSeats] = useState<number>(1); // État pour les places sélectionnées
+    const [selectedSeats, setSelectedSeats] = useState<number>(1);
     const [showConfirmReservation, setShowConfirmReservation] = useState<boolean>(false);
 
     useEffect(() => {
@@ -43,7 +43,7 @@ export default function EventDetailsScreen({ route, navigation }: any) {
     }, [eventId]);
 
     const handleReservation = async () => {
-        setShowConfirmReservation(false); // Ferme la boîte de confirmation
+        setShowConfirmReservation(false);
         try {
             const { error } = await createReservation(eventId, selectedSeats);
 
@@ -51,14 +51,14 @@ export default function EventDetailsScreen({ route, navigation }: any) {
                 console.error('Erreur lors de la réservation :', error.message);
                 Alert.alert('Erreur', 'Impossible d’effectuer la réservation. Veuillez réessayer.');
             } else {
-                // Met à jour les places restantes localement
+
                 setEvent((prev: any) => ({
                     ...prev,
                     places_restantes: prev.places_restantes - selectedSeats,
                 }));
 
                 Alert.alert('Réservation réussie', `Vous avez réservé ${selectedSeats} places pour cet événement.`);
-                // Navigue vers l'onglet "Profil" après la réservation
+
                 navigation.navigate('MainTabs', {
                     screen: 'Profil',
                 });

@@ -10,7 +10,7 @@ interface CustomInputProps {
     onChangeText: (text: string) => void;
     secureTextEntry?: boolean;
     autoCorrect?: boolean;
-    autoComplete?: 'off' | 'email' | 'password' | 'name' | 'username'; // Valeurs autorisées
+    autoComplete?: 'off' | 'email' | 'password' | 'name' | 'username';
 }
 
 export default function CustomInput({

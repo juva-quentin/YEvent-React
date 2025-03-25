@@ -8,11 +8,11 @@ import { getCurrentLocation, startLocationUpdates } from '@/services/locationSer
 import { fetchEvents } from '@/services/eventService';
 import { Event } from '@/models/event';
 
-export default function MapsScreen({ navigation }: any) { // Assurez-vous d'inclure "navigation" pour naviguer
+export default function MapsScreen({ navigation }: any) {
     const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [mapType, setMapType] = useState<MapType>('standard'); // État pour le type de carte
-    const [events, setEvents] = useState<Event[]>([]); // État pour les événements
+    const [mapType, setMapType] = useState<MapType>('standard');
+    const [events, setEvents] = useState<Event[]>([]);
 
     const mapRef = useRef<MapView>(null);
 
@@ -20,11 +20,11 @@ export default function MapsScreen({ navigation }: any) { // Assurez-vous d'incl
     const fetchData = async () => {
         setLoading(true);
         try {
-            // Récupération des coordonnées actuelles
+
             const currentLocation = await getCurrentLocation();
             setLocation(currentLocation);
 
-            // Fetch des événements avec coordonnées
+
             const fetchedEvents = await fetchEvents();
             setEvents(fetchedEvents);
         } catch (error) {

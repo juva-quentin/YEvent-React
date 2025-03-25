@@ -1,13 +1,13 @@
 export type Event = {
-    id: string; // UUID
+    id: string;
     titre: string;
-    description: string | null; // Optionnel
+    description: string | null;
     lieu: string;
-    date: string; // Timestamp
-    prix: number; // int4
-    capacite: number; // int4
-    places_restantes: number; // int4
-    est_complet: boolean; // Booléen
-    coordonnees: { latitude: number; longitude: number }; // JSON
+    date: string;
+    prix: number;
+    capacite: number;
+    places_restantes: number;
+    est_complet: boolean;
+    coordonnees: { latitude: number; longitude: number };
     est_passe?: boolean;
 };

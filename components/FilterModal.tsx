@@ -30,7 +30,7 @@ export default function FilterModal({ visible, onClose, onApply, initialFilters 
     const toggleFilter = (key: string) => {
         setSelectedFilters((prev: { [key: string]: any }) => ({
             ...prev,
-            [key]: prev[key] === 'asc' ? 'desc' : 'asc', // Bascule entre ascendant et descendant
+            [key]: prev[key] === 'asc' ? 'desc' : 'asc',
         }));
     };
 
