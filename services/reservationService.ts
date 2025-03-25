@@ -1,7 +1,16 @@
-import { supabase } from '@/utils/supabase';
 import { Reservation } from "@/models/reservation";
 import { getCurrentUserId } from "@/services/userService";
-import { updateEventPlaces } from "@/services/eventService";
+import {updateEventPlaces} from "@/services/eventService";
+import supabase from "@/utils/supabase";
+
+const BASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const API_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+
+const headers = {
+    'Content-Type': 'application/json',
+    apikey: API_KEY,
+    Authorization: `Bearer ${API_KEY}`,
+};
 
 // Créer une réservation et ses billets associés
 export const createReservation = async (
@@ -98,17 +107,22 @@ export const cancelReservation = async (reservation_id: string): Promise<{ succe
 
 // Voir les réservations d'un utilisateur
 export const getUserReservations = async (utilisateur_id: string): Promise<{ data?: Reservation[]; error?: any }> => {
-    const { data, error } = await supabase
-        .from('reservations')
-        .select('*')
-        .eq('utilisateur_id', utilisateur_id);
+    try {
+        const response = await fetch(`${BASE_URL}/rest/v1/reservations?utilisateur_id=eq.${utilisateur_id}`, {
+            method: 'GET',
+            headers,
+        });
 
-    if (error) {
-        console.error('Erreur lors de la récupération des réservations utilisateur :', error.message);
+        if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des réservations utilisateur.');
+        }
+
+        const data = await response.json();
+        return { data };
+    } catch (error) {
+        console.error(error);
         return { error };
     }
-
-    return { data };
 };
 
 export default {

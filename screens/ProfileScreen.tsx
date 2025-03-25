@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert, ActivityIndicator, FlatList } from 'react-native';
+import {
+    ActivityIndicator,
+    Alert,
+    FlatList,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import Colors from '@/constants/Colors';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,51 +19,63 @@ import { getUserReservations } from '@/services/reservationService';
 import { getEventById } from '@/services/eventService';
 import ConfirmationMessage from '@/components/ConfirmationMessage';
 import EventCard from "@/components/EventCard";
-import {formatDate} from "@/utils/dateUtils";
+import { formatDate } from "@/utils/dateUtils";
 
 export default function ProfileScreen({ navigation }: { navigation: any }) {
     const [user, setUser] = useState<any>(null);
     const [reservations, setReservations] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [refreshing, setRefreshing] = useState<boolean>(false); // État pour le pull-to-refresh
     const [showConfirmLogout, setShowConfirmLogout] = useState<boolean>(false);
 
-    // Récupération des informations de l'utilisateur et des réservations
-    useEffect(() => {
-        const fetchUserData = async () => {
-            const { data: userData, error: userError } = await getCurrentUser();
-            if (userError) {
-                Alert.alert('Erreur', 'Impossible de récupérer vos informations.');
-                return;
-            }
-            setUser(userData);
-
-            const { data: reservationsData, error: reservationsError } = await getUserReservations(userData.id);
-            if (reservationsError) {
-                Alert.alert('Erreur', 'Impossible de récupérer vos réservations.');
-                return;
-            }
-
-            // Enrichir chaque réservation avec les détails de l'événement
-            const enrichedReservations = await Promise.all(
-                reservationsData!.map(async (reservation: any) => {
-                    const { data: eventData, error: eventError } = await getEventById(reservation.evenement_id);
-                    if (eventError) {
-                        console.error(`Erreur pour l'événement ${reservation.evenement_id}:`, eventError.message);
-                        return null;
-                    }
-                    return {
-                        ...reservation,
-                        event: eventData,
-                    };
-                })
-            );
-
-            setReservations(enrichedReservations.filter(Boolean)); // Filtrer les erreurs
+    // Fonction pour récupérer les données de l'utilisateur et des réservations
+    const fetchUserData = async () => {
+        setLoading(true); // Active le chargement
+        const { data: userData, error: userError } = await getCurrentUser();
+        if (userError) {
+            Alert.alert('Erreur', 'Impossible de récupérer vos informations.');
             setLoading(false);
-        };
+            return;
+        }
+        setUser(userData);
 
+        const { data: reservationsData, error: reservationsError } = await getUserReservations(userData.id);
+        if (reservationsError) {
+            Alert.alert('Erreur', 'Impossible de récupérer vos réservations.');
+            setLoading(false);
+            return;
+        }
+
+        // Enrichir chaque réservation avec les détails de l'événement
+        const enrichedReservations = await Promise.all(
+            reservationsData!.map(async (reservation: any) => {
+                const { data: eventData, error: eventError } = await getEventById(reservation.evenement_id);
+                if (eventError) {
+                    console.error(`Erreur pour l'événement ${reservation.evenement_id}:`, eventError.message);
+                    return null;
+                }
+                return {
+                    ...reservation,
+                    event: eventData,
+                };
+            })
+        );
+
+        setReservations(enrichedReservations.filter(Boolean)); // Filtrer les erreurs
+        setLoading(false); // Désactive le chargement
+        setRefreshing(false); // Désactive le rafraîchissement
+    };
+
+    // Exécute la récupération des données à l'initialisation
+    useEffect(() => {
         fetchUserData();
     }, []);
+
+    // Réécoute les focus pour réactualiser les données
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', fetchUserData);
+        return unsubscribe;
+    }, [navigation]);
 
     // Déconnexion
     const handleSignOut = async () => {
@@ -84,9 +105,14 @@ export default function ProfileScreen({ navigation }: { navigation: any }) {
                     </View>
                     <Text style={styles.name}>{user?.nom || 'Nom inconnu'}</Text>
                     <Text style={styles.email}>{user?.email || 'Email inconnu'}</Text>
-                    <TouchableOpacity style={styles.settingsButton} onPress={() => setShowConfirmLogout(true)}>
-                        <Icon name="log-out-outline" size={24} color="#fff" />
-                    </TouchableOpacity>
+                    <View style={styles.headerButtons}>
+                        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('QRCodeScanner')}>
+                            <Icon name="qr-code-outline" size={24} color="#fff" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.iconButton} onPress={() => setShowConfirmLogout(true)}>
+                            <Icon name="log-out-outline" size={24} color="#fff" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
                 {/* Liste des réservations */}
@@ -97,10 +123,15 @@ export default function ProfileScreen({ navigation }: { navigation: any }) {
                             data={reservations}
                             keyExtractor={(item) => item.id}
                             contentContainerStyle={styles.flatList}
+                            onRefresh={() => {
+                                setRefreshing(true);
+                                fetchUserData();
+                            }} // Fonction de rafraîchissement
+                            refreshing={refreshing} // État de rafraîchissement
                             renderItem={({ item }) => (
                                 <EventCard
                                     image="https://placehold.co/400x200.png"
-                                    price={`${item.event.prix*item.nb_billets+'€' || 'Gratuit'}`}
+                                    price={`${item.event.prix * item.nb_billets + '€' || 'Gratuit'}`}
                                     title={item.event.titre}
                                     date={formatDate(item.event.date)}
                                     places={item.nb_billets}
@@ -153,5 +184,14 @@ const styles = StyleSheet.create({
     noReservation: { fontSize: 16, color: Colors.textSecondary, textAlign: 'center', marginTop: 20 },
     flatList: {
         paddingBottom: 70,
+    },
+    headerButtons: {
+        flexDirection: 'row',
+        position: 'absolute',
+        top: 20,
+        right: 20,
+    },
+    iconButton: {
+        marginLeft: 10,
     },
 });
