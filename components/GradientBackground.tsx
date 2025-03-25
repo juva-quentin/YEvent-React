@@ -4,9 +4,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 interface GradientBackgroundProps {
     children: React.ReactNode;
-    startColor: string; // Première couleur du dégradé
-    endColor: string;   // Deuxième couleur du dégradé
-    locations?: readonly [number, number, ...number[]]; // Emplacements des couleurs
+    startColor: string;
+    endColor: string;
+    locations?: readonly [number, number, ...number[]];
 }
 
 export default function GradientBackground({
@@ -17,10 +17,10 @@ export default function GradientBackground({
                                            }: GradientBackgroundProps) {
     return (
         <LinearGradient
-            colors={[startColor, endColor]} // Couleurs du dégradé
-            locations={locations} // Emplacements des couleurs
-            start={{ x: 0, y: 0 }} // Début en haut
-            end={{ x: 0, y: 1 }}   // Fin en bas
+            colors={[startColor, endColor]}
+            locations={locations}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
             style={styles.gradient}
         >
             {children}
@@ -30,6 +30,6 @@ export default function GradientBackground({
 
 const styles = StyleSheet.create({
     gradient: {
-        flex: 1, // Prend tout l'espace disponible
+        flex: 1,
     },
 });

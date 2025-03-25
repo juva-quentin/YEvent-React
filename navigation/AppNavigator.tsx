@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CustomTabBar from '@/components/CustomTapBar';
 
-// Import des écrans
 import HomeScreen from '@/screens/HomeScreen';
 import EventDetailsScreen from '@/screens/EventDetailsScreen';
 import ConfirmationScreen from '@/screens/ConfirmationScreen';
@@ -16,11 +15,11 @@ import QRResultScreen from "@/screens/QRResultScreen";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Navigation des onglets
+
 function BottomTabNavigator() {
     return (
         <Tab.Navigator
-            tabBar={(props) => <CustomTabBar {...props} />} // Barre d'onglets personnalisée
+            tabBar={(props) => <CustomTabBar {...props} />}
             screenOptions={{ headerShown: false }}
             initialRouteName="Accueil"
         >
@@ -31,7 +30,7 @@ function BottomTabNavigator() {
     );
 }
 
-// Navigation principale avec Stack
+
 export default function AppNavigator() {
     return (
         <Stack.Navigator>

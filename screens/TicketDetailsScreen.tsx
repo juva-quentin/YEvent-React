@@ -18,7 +18,7 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
     const [showConfirmCancel, setShowConfirmCancel] = useState<boolean>(false);
     const [annulationPossible, setAnnulationPossible] = useState<boolean>(true);
 
-    // Fetch billets
+
     useEffect(() => {
         const fetchBillets = async () => {
             const { data, error } = await getBilletsByReservationId(reservation.id);
@@ -34,7 +34,7 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
         fetchBillets();
     }, [reservation.id]);
 
-    // Annuler la réservation
+
     const handleCancelReservation = async () => {
         const { success, error } = await cancelReservation(reservation.id);
         if (success) {

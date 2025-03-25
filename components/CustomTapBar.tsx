@@ -9,7 +9,7 @@ interface TabIconProps {
     name: string;
     label: string;
     focused: boolean;
-    scale: Animated.Value; // Animation scale
+    scale: Animated.Value;
 }
 
 const TabIcon = ({ name, label, focused, scale }: TabIconProps) => {

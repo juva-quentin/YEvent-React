@@ -7,12 +7,12 @@ import { Picker } from '@react-native-picker/picker';
 
 interface SeatSelectorProps {
     onValueChange: (value: number) => void;
-    maxSeats: number; // Nombre maximum de places disponibles
+    maxSeats: number;
 }
 
 export default function SeatSelector({ onValueChange, maxSeats }: SeatSelectorProps) {
     const [quantity, setQuantity] = useState<number>(1);
-    const [showPicker, setShowPicker] = useState<boolean>(false); // Contrôle pour afficher le picker
+    const [showPicker, setShowPicker] = useState<boolean>(false);
 
     const handleValueChange = (value: string) => {
         const parsedValue = parseInt(value, 10);

@@ -1,11 +1,11 @@
 import { Billet } from './billet';
 
 export type Reservation = {
-    id: string; // UUID (Clé primaire)
-    utilisateur_id: string; // UUID (Clé étrangère vers utilisateurs)
-    evenement_id: string; // UUID (Clé étrangère vers evenements)
-    nb_billets: number; // Nombre total de billets
-    numero_conf: string; // Numéro de confirmation
-    created_at: string; // Timestamp de la création
-    billets?: Billet[]; // Liste des billets associés
+    id: string;
+    utilisateur_id: string;
+    evenement_id: string;
+    nb_billets: number;
+    numero_conf: string;
+    created_at: string;
+    billets?: Billet[];
 };

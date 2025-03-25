@@ -33,7 +33,7 @@ export default function LoginScreen({ navigation }) {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <KeyboardAvoidingView
                     style={styles.container}
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Ajuste selon la plateforme
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 >
                     {/* Logo */}
                     <Image
