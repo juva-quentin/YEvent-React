@@ -16,6 +16,7 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
     const [billets, setBillets] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [showConfirmCancel, setShowConfirmCancel] = useState<boolean>(false);
+    const [annulationPossible, setAnnulationPossible] = useState<boolean>(true);
 
     // Fetch billets
     useEffect(() => {
@@ -25,6 +26,8 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
                 Alert.alert("Erreur", "Impossible de charger les billets.");
             } else {
                 setBillets(data || []);
+                const auMoinsUnUtilise = data?.some((billet) => billet.is_used);
+                setAnnulationPossible(!auMoinsUnUtilise);
             }
             setLoading(false);
         };
@@ -60,9 +63,15 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
                         <Icon name="arrow-back" size={24} color="#fff" />
                     </TouchableOpacity>
                     <Text style={styles.appBarTitle}>Ma réservation</Text>
-                    <TouchableOpacity onPress={() => setShowConfirmCancel(true)} style={styles.cancelButton}>
-                        <Icon name="trash-outline" size={24} color="#fff" />
-                    </TouchableOpacity>
+                    {annulationPossible ? (
+                        <TouchableOpacity onPress={() => setShowConfirmCancel(true)} style={styles.cancelButton}>
+                            <Icon name="trash-outline" size={24} color="#fff" />
+                        </TouchableOpacity>
+                    ) : (
+                        <View style={styles.cancelButton}>
+                            <Icon name="lock-closed-outline" size={24} color="gray" />
+                        </View>
+                    )}
                 </View>
 
                 {/* Section de la réservation */}
@@ -89,6 +98,10 @@ export default function TicketDetailsScreen({ route, navigation }: any) {
                                 <View style={styles.qrCodeContainer}>
                                     <QRCode value={item.numero_billet} size={150} />
                                 </View>
+                                {/* Si billet validé, on affiche un badge/texte */}
+                                {item.is_used && (
+                                    <Text style={styles.ticketValidated}>Billet validé</Text>
+                                )}
                             </View>
                         )}
                         snapToInterval={screenWidth * 0.8 + 20} // Taille de la carte + marge
@@ -202,5 +215,12 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: Colors.text,
         borderRadius: 10,
+    },
+    ticketValidated: {
+        marginTop: 10,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: Colors.secondary,
+        textAlign: 'center',
     },
 });
