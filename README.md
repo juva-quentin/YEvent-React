@@ -42,6 +42,12 @@ L'application utilise **Supabase** pour la gestion des données et intègre des 
    ```bash
    git clone https://github.com/juva-quentin/YEvent-React.git
    ```
+    
+2. Créez un fichier **.env.local** à la racine du projet et ajoutez les variables suivantes :
+    ```bash
+    EXPO_PUBLIC_SUPABASE_URL=https://vqfqfcyqnejpwwlrrvtl.supabase.co
+    EXPO_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxZnFmY3lxbmVqcHd3bHJydnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQzNTc0OTYsImV4cCI6MjA0OTkzMzQ5Nn0.7bwbZL2yd5HVcDd9c_TW4ItSuIuBt8BhWyz0M10fD8A
+    ```
 2. Installez les dépendances :
    ```bash
    npm install
@@ -50,8 +56,7 @@ L'application utilise **Supabase** pour la gestion des données et intègre des 
    ```bash
    npx expo start
    ```
-4. Configurez Supabase avec les tables nécessaires pour utilisateurs, événements et réservations.
-
+4. Scannez le QR Code avec l'application Expo Go sur votre smartphone ou lancez un émulateur.
 ---
 
 ## Contributeurs
