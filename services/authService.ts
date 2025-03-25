@@ -1,5 +1,8 @@
 import { supabase } from '@/utils/supabase';
 
+const BASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const API_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+
 // Fonction pour créer un utilisateur avec email et mot de passe
 export const signUpWithEmail = async (email: string, password: string, nom: string) => {
     // 1. Inscription via Supabase Auth
@@ -13,15 +16,20 @@ export const signUpWithEmail = async (email: string, password: string, nom: stri
     // 2. Récupérer l'ID utilisateur créé par Supabase Auth
     const user = data.user;
     if (user) {
-        // 3. Ajouter l'utilisateur dans la table 'utilisateurs'
-        const { error: dbError } = await supabase
-            .from('utilisateurs')
-            .insert([{ id: user.id, email, nom, created_at: new Date() }]);
-
-        if (dbError) {
-            console.error('Erreur lors de la création de l\'utilisateur dans la base de données :', dbError.message);
-            return { error: dbError };
-        }
+        await fetch(`${BASE_URL}/rest/v1/utilisateurs`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                apikey: API_KEY,
+                Authorization: `Bearer ${API_KEY}`,
+            },
+            body: JSON.stringify({
+                id: user.id,
+                email,
+                nom,
+                created_at: new Date().toISOString(),
+            }),
+        });
     }
 
     return { user: data.user };

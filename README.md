@@ -1,50 +1,64 @@
-# Welcome to your Expo app 👋
+# Yevent
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Yevent est une application mobile développée en **React Native** avec **Expo**, conçue pour permettre aux utilisateurs de réserver facilement des événements. Ce projet met en avant une interface utilisateur intuitive et des fonctionnalités robustes de gestion d'événements et de réservations.
 
-## Get started
+## Table des matières
+1. [Résumé du Projet](#résumé-du-projet)
+2. [Fonctionnalités](#fonctionnalités)
+3. [Technologies Utilisées](#technologies-utilisées)
+4. [Instructions pour Exécuter le Projet](#instructions-pour-exécuter-le-projet)
+5. [Contributeurs](#contributeurs)
 
-1. Install dependencies
+---
 
+## Résumé du Projet
+Yevent est conçu pour offrir une expérience fluide et rapide aux utilisateurs souhaitant :
+- Découvrir des événements disponibles.
+- Réserver des billets pour leurs événements préférés.
+- Gérer leurs réservations et leurs informations personnelles.
+
+L'application utilise **Supabase** pour la gestion des données et intègre des fonctionnalités natives telles que la géolocalisation et les QR Codes.
+
+---
+
+## Fonctionnalités
+### Utilisateur
+- Connexion et déconnexion sécurisées.
+- Consultation et recherche d'événements.
+- Réservation et annulation de billets.
+- Consultation des réservations passées et à venir.
+- Génération de QR Codes pour les réservations.
+- Visualisation de l'emplacement des événements sur une carte.
+---
+
+## Technologies Utilisées
+- **React Native** avec **Expo** pour le développement front-end.
+- **Supabase** pour le backend (gestion des utilisateurs, événements, et réservations).
+
+---
+
+## Instructions pour Exécuter le Projet
+1. Clonez ce repository :
+   ```bash
+   git clone https://github.com/juva-quentin/YEvent-React.git
+   ```
+    
+2. Créez un fichier **.env.local** à la racine du projet et ajoutez les variables suivantes :
+    ```bash
+    EXPO_PUBLIC_SUPABASE_URL=https://vqfqfcyqnejpwwlrrvtl.supabase.co
+    EXPO_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxZnFmY3lxbmVqcHd3bHJydnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQzNTc0OTYsImV4cCI6MjA0OTkzMzQ5Nn0.7bwbZL2yd5HVcDd9c_TW4ItSuIuBt8BhWyz0M10fD8A
+    ```
+2. Installez les dépendances :
    ```bash
    npm install
    ```
-
-2. Start the app
-
+3. Lancez l'application avec Expo :
    ```bash
-    npx expo start
+   npx expo start
    ```
+4. Scannez le QR Code avec l'application Expo Go sur votre smartphone ou lancez un émulateur.
+---
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Contributeurs
+- **Célian Frasca** - Développeur
+- **Quentin Juvet** - Développeur
