@@ -35,7 +35,7 @@ export const getBilletsByReservationId = async (
     }
 };
 
-// ✅ Vérifie si un billet est valide (existe + pas utilisé)
+// Vérifie si un billet est valide (existe + pas utilisé)
 export const verifierBillet = async (
     numero_billet: string
 ): Promise<{ success: boolean; message: string; billet?: Billet }> => {
@@ -67,7 +67,7 @@ export const verifierBillet = async (
     }
 };
 
-// ✅ Valide un billet (met is_used à true)
+// Valide un billet
 export const validerBillet = async (billetId: string): Promise<{ success: boolean; message: string }> => {
     try {
         const response = await fetch(`${BASE_URL}/rest/v1/billets?id=eq.${billetId}`, {
@@ -77,7 +77,11 @@ export const validerBillet = async (billetId: string): Promise<{ success: boolea
                 Authorization: `Bearer ${API_KEY}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ is_used: true }),
+
+            body: JSON.stringify({
+                is_used: true,
+                validated_at: new Date().toISOString(),
+            }),
         });
 
         if (!response.ok) {
