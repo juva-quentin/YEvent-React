@@ -36,7 +36,6 @@ export default function RegisterScreen({ navigation }) {
             Alert.alert('Erreur', result.error.message);
         } else {
             Alert.alert('Succès', 'Votre compte a bien été créé !');
-            navigation.navigate('Login');
         }
     };
 

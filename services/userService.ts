@@ -1,32 +1,47 @@
 import { supabase } from '@/utils/supabase';
 import { User } from '@/models/user';
 
+const BASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const API_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+
+const headers = {
+    'Content-Type': 'application/json',
+    apikey: API_KEY,
+    Authorization: `Bearer ${API_KEY}`,
+};
+
 // Lire tous les utilisateurs
 export const getAllUsers = async () => {
-    const { data, error } = await supabase.from('utilisateurs').select('*');
+    try {
+        const response = await fetch(`${BASE_URL}/rest/v1/utilisateurs`, { headers });
 
-    if (error) {
-        console.error('Erreur lors de la récupération des utilisateurs :', error.message);
+        if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des utilisateurs.');
+        }
+
+        const data = await response.json();
+        return { data };
+    } catch (error) {
+        console.error(error);
         return { error };
     }
-
-    return { data };
 };
 
 // Lire un utilisateur par ID
 export const getUserById = async (id: string) => {
-    const { data, error } = await supabase
-        .from('utilisateurs')
-        .select('*')
-        .eq('id', id)
-        .single(); // Retourne un seul utilisateur
+    try {
+        const response = await fetch(`${BASE_URL}/rest/v1/utilisateurs?id=eq.${id}`, { headers });
 
-    if (error) {
-        console.error('Erreur lors de la récupération de l\'utilisateur :', error.message);
+        if (!response.ok) {
+            throw new Error(`Erreur lors de la récupération de l'utilisateur avec ID : ${id}`);
+        }
+
+        const data = await response.json();
+        return { data: data[0] };
+    } catch (error) {
+        console.error(error);
         return { error };
     }
-
-    return { data };
 };
 
 // Récupérer l'utilisateur connecté
@@ -41,50 +56,56 @@ export const getCurrentUser = async () => {
         return { error: authError || new Error('Aucun utilisateur connecté') };
     }
 
-    // Utilise l'ID de l'utilisateur provenant de Supabase Auth
-    const { data, error } = await supabase
-        .from('utilisateurs')
-        .select('*')
-        .eq('id', user.id) // Utilise l'ID de Supabase Auth
-        .single();
+    const userId = user.id;
 
-    if (error) {
-        console.error('Erreur lors de la récupération des détails utilisateur :', error.message);
-        return { error };
+    const response = await fetch(`${BASE_URL}/rest/v1/utilisateurs?id=eq.${userId}`, { headers });
+
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des détails utilisateur.');
     }
 
-    return { data };
+    const data = await response.json();
+    return { data: data[0] };
 };
 
 // Mettre à jour un utilisateur
 export const updateUser = async (id: string, updates: Partial<Omit<User, 'id' | 'created_at'>>) => {
-    const { data, error } = await supabase
-        .from('utilisateurs')
-        .update(updates)
-        .eq('id', id)
-        .select();
+    try {
+        const response = await fetch(`${BASE_URL}/rest/v1/utilisateurs?id=eq.${id}`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify(updates),
+        });
 
-    if (error) {
-        console.error('Erreur lors de la mise à jour de l\'utilisateur :', error.message);
+        if (!response.ok) {
+            throw new Error('Erreur lors de la mise à jour de l\'utilisateur.');
+        }
+
+        const data = await response.json();
+        return { data: data[0] };
+    } catch (error) {
+        console.error(error);
         return { error };
     }
-
-    return { data: data[0] };
 };
 
 // Supprimer un utilisateur
 export const deleteUser = async (id: string) => {
-    const { data, error } = await supabase
-        .from('utilisateurs')
-        .delete()
-        .eq('id', id);
+    try {
+        const response = await fetch(`${BASE_URL}/rest/v1/utilisateurs?id=eq.${id}`, {
+            method: 'DELETE',
+            headers,
+        });
 
-    if (error) {
-        console.error('Erreur lors de la suppression de l\'utilisateur :', error.message);
+        if (!response.ok) {
+            throw new Error('Erreur lors de la suppression de l\'utilisateur.');
+        }
+
+        return { message: 'Utilisateur supprimé avec succès' };
+    } catch (error) {
+        console.error(error);
         return { error };
     }
-
-    return { message: 'Utilisateur supprimé avec succès', data };
 };
 
 // Obtenir l'ID de l'utilisateur connecté
