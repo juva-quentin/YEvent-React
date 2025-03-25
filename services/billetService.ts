@@ -57,7 +57,17 @@ export const verifierBillet = async (
         const billet = data[0];
 
         if (billet.is_used) {
-            return { success: false, message: 'Billet déjà utilisé' };
+            // 💡 Formatter la date en locale lisible
+            const date = billet.validated_at ? new Date(billet.validated_at) : null;
+            const formattedDate = date
+                ? `le ${date.toLocaleDateString()} à ${date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
+                : 'à une date inconnue';
+
+            return {
+                success: false,
+                message: `Billet déjà utilisé ${formattedDate}`,
+                billet,
+            };
         }
 
         return { success: true, message: 'Billet valide', billet };
@@ -80,7 +90,7 @@ export const validerBillet = async (billetId: string): Promise<{ success: boolea
 
             body: JSON.stringify({
                 is_used: true,
-                validated_at: new Date().toISOString(),
+                validated_at: new Date(),
             }),
         });
 
